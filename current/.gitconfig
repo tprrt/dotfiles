@@ -1,0 +1,57 @@
+[color]
+ui = auto
+
+[user]
+name = tprrt
+email = tprrt@tupi.fr
+
+[sendemail]
+from = Thomas Perrot <thomas.perrot@tupi.fr>
+
+[core]
+# autocrlf = input
+# safecrlf = true
+editor = emacs -nw
+
+[color]
+ui = auto
+
+# [push]
+# default = simple
+
+[status]
+showUntrackedFiles = all
+
+[help]
+autocorrect = 1
+# format = html
+
+[alias]
+a = add -Ap
+r = reset -p
+s = status -u
+d = diff --word-diff=color --word-diff-regex=.
+b = branch -vv
+l = log --graph --oneline --all
+tidy = rebase -i @{upstream}..
+# rebase = rebase --preserve-merges
+# push = push -u
+
+[mergetool]
+prompt = False
+
+[merge]
+tool = ediff
+
+[mergetool "ediff"]
+cmd = emacsclient -nw -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
+
+# [difftool "ediff"]
+# cmd = emacs -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+
+# [difftool "ediffclient"]
+# cmd = emacsclient -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+
+# [diff]
+# tool = ediffclient
+

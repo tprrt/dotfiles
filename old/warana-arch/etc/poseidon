@@ -1,0 +1,10 @@
+CONNECTION="wireless"
+DESCRIPTION="poseidon wifi connection"
+INTERFACE="wlan0"
+SECURITY="wpa-config"
+WPA_CONF="/etc/network.d/poseidon.conf"
+IP="dhcp"
+DHCP_TIMEOUT=60
+#TIMEOUT=300
+#POST_UP="sleep 5 && export use_proxy='on' && export http_proxy='http://proxy.irit.fr:8001' && echo 'Proxy configuration added'"
+#POST_DOWN="sleep 5 && export use_proxy='off' && export http_proxy='' && echo 'Proxy configuration removed'"

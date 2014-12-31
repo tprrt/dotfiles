@@ -1,0 +1,6 @@
+CONNECTION="wireless"
+DESCRIPTION="ups wifi connection"
+INTERFACE="wlan0"
+ESSID="ups"
+IP="dhcp"
+DHCP_TIMEOUT=60

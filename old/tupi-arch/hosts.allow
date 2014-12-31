@@ -1,0 +1,10 @@
+#
+# /etc/hosts.allow
+#
+
+## paullinia.tupi.fr
+#sshd: 82.241.249.71
+
+sshd: ALL EXCEPT /etc/hosts.evil
+
+# End of file
