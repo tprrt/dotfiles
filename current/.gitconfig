@@ -28,14 +28,16 @@ autocorrect = 1
 
 [alias]
 a = add -Ap
+b = branch -vv
+d = diff --word-diff=color --word-diff-regex=.
+l = log --graph --oneline --all
+p = push -u
 r = reset -p
 s = status -u
-d = diff --word-diff=color --word-diff-regex=.
-b = branch -vv
-l = log --graph --oneline --all
+
 tidy = rebase -i @{upstream}..
-# rebase = rebase --preserve-merges
-# push = push -u
+theirs = git cherry-pick --strategy=recursive -X theirs
+preserve = rebase --preserve-merges
 
 [mergetool]
 prompt = False
