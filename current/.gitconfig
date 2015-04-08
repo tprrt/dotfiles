@@ -35,6 +35,7 @@ p = push -u
 r = reset -p
 s = status -u
 
+lola = log --graph --decorate --abbrev --oneline
 tidy = rebase -i @{upstream}..
 theirs = git cherry-pick --strategy=recursive -X theirs
 preserve = rebase --preserve-merges
