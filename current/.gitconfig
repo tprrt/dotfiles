@@ -7,6 +7,11 @@ email = tprrt@tupi.fr
 
 [sendemail]
 from = Thomas Perrot <thomas.perrot@tupi.fr>
+smtpserver = smtp.gmail.com
+smtpserverport = 587
+smtpencryption = tls
+smtpuser = foo
+smtppass = bar
 
 [core]
 # autocrlf = input

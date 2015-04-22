@@ -134,17 +134,19 @@ export CCACHE_DIR=$HOME/.ccache
 # Java configuration for Android AOSP
 # export PATH=$PATH:$JAVA_HOME/bin
 
-# Additional commands to clean easily a repo
-# alias rclean="repo forall -c 'git clean -xdf'"
+# Additional commands to clean easily a git-repo
+# alias rclean="repo forall -c 'git clean -xdf > /dev/null 2>&1'"
+# alias rdrop="repo forall -c 'git stash drop > /dev/null 2>&1; exit 0'"
 # alias rreset="repo forall -c 'git reset --hard'"
-# alias rdel="repo forall -c 'git branch | grep refs-changes | xargs git branch -D'"
+# alias rdel="repo forall -c 'git branch|grep refs-changes|xargs git branch -D > /dev/null 2>&1; exit 0'"
 
 # -----------------------------------------------------------------------------
 # Personal configuration
 # -----------------------------------------------------------------------------
 
-logless() { ccze -A < $1 | less -R; }
-logtail() { tail -f $1 | ccze -A; }
+function logless { ccze -A < $1 | less -R; }
+function logtail { tail -f $1 | ccze -A; }
+function epass { openssl passwd -1 $1; }
 
 alias emacs='emacs -nw'
 alias emacsclient='emacsclient -nw'
@@ -165,7 +167,7 @@ export VISUAL='emacs -nw'
 # export GIT_PROXY_COMMAND=$HOME/utils/socks-gw
 export PATH=$HOME/.local/bin:$PATH
 export NPROC=`nproc`
-export GPGKEY=349192EF
+export GPGKEY=FOO BAR
 
 # Byobu prompt
 [ -r $HOME/.byobu/prompt ] && . $HOME/.byobu/prompt
