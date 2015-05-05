@@ -5,6 +5,9 @@ ui = auto
 name = tprrt
 email = tprrt@tupi.fr
 
+[format]
+signoff = true
+
 [sendemail]
 from = Thomas Perrot <thomas.perrot@tupi.fr>
 smtpserver = smtp.gmail.com
