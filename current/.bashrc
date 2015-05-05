@@ -159,6 +159,7 @@ alias du='du -c -h'
 alias mkdir='mkdir -p -v'
 alias ping='ping -c 5'
 alias 256="export TERM=screen-256color-bce"
+alias psc="ps xawf -eo pid,user,cgroup,args"
 
 export LANG='en_US.UTF-8'
 export EDITOR='emacs -nw'
