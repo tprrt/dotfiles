@@ -139,6 +139,7 @@ export CCACHE_DIR=$HOME/.ccache
 # alias rdrop="repo forall -c 'git stash drop > /dev/null 2>&1; exit 0'"
 # alias rreset="repo forall -c 'git reset --hard'"
 # alias rdel="repo forall -c 'git branch|grep refs-changes|xargs git branch -D > /dev/null 2>&1; exit 0'"
+# alias rsync="repo sync -j16 --i-know-i-may-hurt-the-team=16"
 
 # -----------------------------------------------------------------------------
 # Personal configuration

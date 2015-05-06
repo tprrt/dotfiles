@@ -2,11 +2,9 @@
 ui = auto
 
 [user]
-name = tprrt
-email = tprrt@tupi.fr
-
-[format]
-signoff = true
+name = "Thomas Perrot"
+email = "thomas.perrot@tupi.fr"
+signingkey = FOO BAR
 
 [sendemail]
 from = Thomas Perrot <thomas.perrot@tupi.fr>
