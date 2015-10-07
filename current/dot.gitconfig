@@ -47,6 +47,9 @@ tidy = rebase -i @{upstream}..
 theirs = git cherry-pick --strategy=recursive -X theirs
 preserve = rebase --preserve-merges
 
+# git@github.com:albfan/git-changemail.git
+# git clone https://github.com/albfan/git-backup-clean
+
 [mergetool]
 prompt = False
 
