@@ -148,11 +148,18 @@ channels = (
   { name = "#netfuze"; chatnet = "NetFuze"; autojoin = "No"; },
   { name = "#oftc"; chatnet = "OFTC"; autojoin = "No"; },
   { name = "silc"; chatnet = "SILC"; autojoin = "No"; },
-  { name = "#linux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#oe"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#yocto"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#kernel"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#elinux"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#edev"; chatnet = "Freenode"; autojoin = "yes"; }
+  { name = "#edev"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#barebox"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#u-boot"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#busybox"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#linux"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#debian"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#archlinux"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#gentoo"; chatnet = "Freenode"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -418,3 +425,4 @@ settings = {
   };
 };
 ignores = ( { level = "JOINS PARTS QUITS"; } );
+logs = { };
