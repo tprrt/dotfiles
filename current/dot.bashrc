@@ -122,6 +122,7 @@ fi
 
 export USE_CCACHE=1
 export CCACHE_DIR=$HOME/.ccache
+export PATH="/usr/lib/ccache/:$PATH"
 
 # -----------------------------------------------------------------------------
 # Android AOSP
@@ -130,7 +131,7 @@ export CCACHE_DIR=$HOME/.ccache
 # android build dir
 # export OUT_DIR_COMMON_BASE=$HOME/dev/android/build
 # android repo bin dir
-# export PATH=$HOME/dev/android/bin:$PATH
+export PATH=$HOME/bin:$PATH
 
 # Java configuration for KK
 # export JAVA_HOME="/usr/lib/jvm/java-6-oracle"
@@ -142,11 +143,11 @@ export CCACHE_DIR=$HOME/.ccache
 # export PATH=$PATH:$JAVA_HOME/bin
 
 # Additional commands to clean easily a git-repo
-# alias rclean="repo forall -c 'git clean -xdf > /dev/null 2>&1'"
-# alias rdrop="repo forall -c 'git stash drop > /dev/null 2>&1; exit 0'"
-# alias rreset="repo forall -c 'git reset --hard'"
-# alias rdel="repo forall -c 'git branch|grep refs-changes|xargs git branch -D > /dev/null 2>&1; exit 0'"
-# alias rsync="repo sync -j16 --i-know-i-may-hurt-the-team=16"
+alias rclean="repo forall -c 'git clean -xdf > /dev/null 2>&1'"
+alias rdrop="repo forall -c 'git stash drop > /dev/null 2>&1; exit 0'"
+alias rreset="repo forall -c 'git reset --hard'"
+alias rdel="repo forall -c 'git branch|grep refs-changes|xargs git branch -D > /dev/null 2>&1; exit 0'"
+alias rsync="repo sync -j16 --i-know-i-may-hurt-the-team=16"
 
 # -----------------------------------------------------------------------------
 # Personal configuration
@@ -158,7 +159,7 @@ function epass { openssl passwd -1 $1; }
 
 alias emacs='emacs -nw'
 alias emacsclient='emacsclient -nw'
-alias diff='colordiff'
+alias diff='colordiff -Nurp'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -168,6 +169,7 @@ alias mkdir='mkdir -p -v'
 alias ping='ping -c 5'
 alias 256="export TERM=screen-256color-bce"
 alias psc="ps xawf -eo pid,user,cgroup,args"
+alias picocom="picocom --escape x"
 
 export LANG='en_US.UTF-8'
 export EDITOR='emacs -nw'
@@ -176,7 +178,7 @@ export VISUAL='emacs -nw'
 # export GIT_PROXY_COMMAND=$HOME/utils/socks-gw
 export PATH=$HOME/.local/bin:$PATH
 export NPROC=`nproc`
-export GPGKEY=FOO BAR
+# export GPGKEY=FOO BAR
 
 # Byobu prompt
 [ -r $HOME/.byobu/prompt ] && . $HOME/.byobu/prompt
