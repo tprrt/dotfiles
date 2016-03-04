@@ -8,7 +8,7 @@ servers = (
   { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
   { address = "irc.efnet.org"; chatnet = "EFNet"; port = "6667"; },
   { address = "irc.esper.net"; chatnet = "EsperNet"; port = "6667"; },
-  { 
+  {
     address = "chat.freenode.net";
     chatnet = "Freenode";
     port = "6667";
@@ -83,6 +83,7 @@ chatnets = {
     nick = "t0mmy";
     max_kicks = "1";
     max_msgs = "4";
+    max_modes = "4";
     max_whois = "1";
   };
   GameSurge = {
@@ -151,15 +152,19 @@ channels = (
   { name = "#oe"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#yocto"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#kernel"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#udev"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#chibios"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#elinux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#edev"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#barebox"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#barebox"; chatnet = "Freenode"; autojoin = "no"; },
   { name = "#u-boot"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#busybox"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#linux"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#debian"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#archlinux"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#gentoo"; chatnet = "Freenode"; autojoin = "yes"; }
+  { name = "#debian"; chatnet = "Freenode"; autojoin = "no"; },
+  { name = "#archlinux"; chatnet = "Freenode"; autojoin = "no"; },
+  { name = "#gentoo"; chatnet = "Freenode"; autojoin = "no"; },
+  { name = "#alpine-linux"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#alpine-devel"; chatnet = "Freenode"; autojoin = "yes"; },
 );
 
 aliases = {
