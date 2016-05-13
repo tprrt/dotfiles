@@ -165,6 +165,7 @@ channels = (
   { name = "#gentoo"; chatnet = "Freenode"; autojoin = "no"; },
   { name = "#alpine-linux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#alpine-devel"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#coreboot"; chatnet = "Freenode"; autojoin = "yes"; }
 );
 
 aliases = {
