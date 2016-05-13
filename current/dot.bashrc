@@ -88,9 +88,9 @@ fi
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls --color=auto -alF'
+alias la='ls --color=auto -A'
+alias l='ls --color=auto -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -156,6 +156,7 @@ alias rsync="repo sync -j16 --i-know-i-may-hurt-the-team=16"
 function logless { ccze -A < $1 | less -R; }
 function logtail { tail -f $1 | ccze -A; }
 function epass { openssl passwd -1 $1; }
+function kclip { xclip -sel clip < ~/.ssh/id_rsa.pub; }
 
 alias emacs='emacs -nw'
 alias emacsclient='emacsclient -nw'
