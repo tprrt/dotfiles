@@ -8,7 +8,7 @@ servers = (
   { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
   { address = "irc.efnet.org"; chatnet = "EFNet"; port = "6667"; },
   { address = "irc.esper.net"; chatnet = "EsperNet"; port = "6667"; },
-  {
+  { 
     address = "chat.freenode.net";
     chatnet = "Freenode";
     port = "6667";
@@ -81,6 +81,7 @@ chatnets = {
   Freenode = {
     type = "IRC";
     nick = "t0mmy";
+    autosendcmd = "/^msg NickServ IDENTIFY password;wait 2000";
     max_kicks = "1";
     max_msgs = "4";
     max_modes = "4";
@@ -160,11 +161,12 @@ channels = (
   { name = "#u-boot"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#busybox"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#linux"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#debian"; chatnet = "Freenode"; autojoin = "no"; },
-  { name = "#archlinux"; chatnet = "Freenode"; autojoin = "no"; },
+  { name = "#debian"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#archlinux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#gentoo"; chatnet = "Freenode"; autojoin = "no"; },
   { name = "#alpine-linux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#alpine-devel"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#zephyrproject"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#coreboot"; chatnet = "Freenode"; autojoin = "yes"; }
 );
 
@@ -429,6 +431,7 @@ settings = {
     beep_msg_level = "MSGS NOTICES INVITES DCC DCCMSGS HILIGHT";
     theme = "default";
   };
+  "irc/core" = { alternate_nick = "tprrt_"; };
 };
 ignores = ( { level = "JOINS PARTS QUITS"; } );
 logs = { };
