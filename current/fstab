@@ -5,18 +5,10 @@
 # that works even if disks are added and removed. See fstab(5).
 #
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
-
-# /boot was on /dev/sda1 during installation
-UUID=d29d1fcb-86ac-4f23-a7a9-ad61af0f7287 /boot		ext2    defaults					0       2
-
-/dev/mapper/X220-root      		  /             ext4    noatime,discard,errors=remount-ro		0       1
-/dev/mapper/X220-home      		  /home         ext4    defaults,noatime,discard        		0       2
-/dev/mapper/X220-swap_1    		  none          swap    sw,noatime,discard              		0       0
-
-tmpfs 			   		  /tmp 		tmpfs 	defaults 					0 	0
-tmpfs 			   		  /var/tmp 	tmpfs 	defaults 					0 	0
-tmpfs 			   		  /var/lock 	tmpfs 	defaults 					0 	0
-
-/dev/sdb1       			  /media/usb0   auto    rw,user,noauto  				0       0
-/dev/sdb2       			  /media/usb1   auto    rw,user,noauto  				0       0
-/dev/sdc1       			  /media/usb2   auto    rw,user,noauto  				0       0
+/dev/mapper/X220--vg-root /               ext4    errors=remount-ro 0       1
+# /boot was on /dev/nvme0n1p1 during installation
+UUID=cc1b3a14-64d9-4823-820f-8e07483a8ca8 /boot           ext2    defaults        0       2
+/dev/mapper/X220--vg-home /home           ext4    defaults        0       2
+/dev/mapper/X220--vg-tmp /tmp            ext4    defaults        0       2
+/dev/mapper/X220--vg-var /var            ext4    defaults        0       2
+/dev/mapper/X220--vg-swap_1 none            swap    sw              0       0
