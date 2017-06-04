@@ -167,7 +167,10 @@ channels = (
   { name = "#alpine-linux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#alpine-devel"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#zephyrproject"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#coreboot"; chatnet = "Freenode"; autojoin = "yes"; }
+  { name = "#coreboot"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#avr"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#musl"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#scons"; chatnet = "Freenode"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -427,7 +430,6 @@ settings = {
   "fe-text" = { actlist_sort = "refnum"; };
   "fe-common/core" = {
     autolog = "yes";
-    bell_beeps = "yes";
     beep_msg_level = "MSGS NOTICES INVITES DCC DCCMSGS HILIGHT";
     theme = "default";
   };
