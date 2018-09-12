@@ -7,12 +7,15 @@ email = "thomas.perrot@tupi.fr"
 signingkey = FOO BAR
 
 [sendemail]
-from = Thomas Perrot <thomas.perrot@tupi.fr>
 smtpserver = smtp.gmail.com
 smtpserverport = 587
 smtpencryption = tls
+from = Thomas Perrot <thomas.perrot@tupi.fr>
 smtpuser = foo
 smtppass = bar
+# from = Thomas Perrot <thomas.perrot@sigfox.com>
+# smtpuser = thomas.perrot@sigfox.com
+# smtppass = FOO BAR
 
 [core]
 # autocrlf = input
@@ -22,7 +25,7 @@ editor = emacs -nw
 [color]
 ui = auto
 
-# [push]
+[push]
 # default = simple
 
 [status]
@@ -68,3 +71,6 @@ cmd = emacsclient -nw -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"
 # [diff]
 # tool = ediffclient
 
+# [diff "hex"]
+# textconv = hexdump -v -C
+# binary = true
