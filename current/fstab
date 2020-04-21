@@ -1,14 +1,15 @@
-# /etc/fstab: static file system information.
+
 #
-# Use 'blkid' to print the universally unique identifier for a
-# device; this may be used with UUID= as a more robust way to name devices
-# that works even if disks are added and removed. See fstab(5).
+# /etc/fstab
+# Created by anaconda on Mon Oct 14 16:14:59 2019
 #
-# <file system> <mount point>   <type>  <options>       <dump>  <pass>
-/dev/mapper/X220--vg-root /               ext4    errors=remount-ro 0       1
-# /boot was on /dev/nvme0n1p1 during installation
-UUID=cc1b3a14-64d9-4823-820f-8e07483a8ca8 /boot           ext2    defaults        0       2
-/dev/mapper/X220--vg-home /home           ext4    defaults        0       2
-/dev/mapper/X220--vg-tmp /tmp            ext4    defaults        0       2
-/dev/mapper/X220--vg-var /var            ext4    defaults        0       2
-/dev/mapper/X220--vg-swap_1 none            swap    sw              0       0
+# Accessible filesystems, by reference, are maintained under '/dev/disk/'.
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info.
+#
+# After editing this file, run 'systemctl daemon-reload' to update systemd
+# units generated from this file.
+#
+/dev/mapper/fedora-root /                       ext4    defaults,x-systemd.device-timeout=0 1 1
+UUID=3f9acf48-9045-4519-bec4-63bc060befe1 /boot                   ext4    defaults        1 2
+/dev/mapper/fedora-home /home                   ext4    defaults,x-systemd.device-timeout=0 1 2
+/dev/mapper/fedora-swap none                    swap    defaults,x-systemd.device-timeout=0 0 0

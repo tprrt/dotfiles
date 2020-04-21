@@ -4,18 +4,17 @@ ui = auto
 [user]
 name = "Thomas Perrot"
 email = "thomas.perrot@tupi.fr"
-signingkey = FOO BAR
+signingkey = FOOBAR
 
 [sendemail]
 smtpserver = smtp.gmail.com
 smtpserverport = 587
 smtpencryption = tls
+tocover = 1
+cccover = 1
 from = Thomas Perrot <thomas.perrot@tupi.fr>
-smtpuser = foo
-smtppass = bar
-# from = Thomas Perrot <thomas.perrot@sigfox.com>
-# smtpuser = thomas.perrot@sigfox.com
-# smtppass = FOO BAR
+smtpuser = FOO
+smtppass = BAR
 
 [core]
 # autocrlf = input
@@ -38,14 +37,15 @@ autocorrect = 1
 [alias]
 a = add -Ap
 b = branch -vv
-d = diff --word-diff=color --word-diff-regex=.
+c = commit -s -S
+d = diff --word-diff=color --word-diff-regex=. --patience
 l = log --graph --oneline --all
 p = push -u
 r = reset -p
 s = status -u
 
-lol = log --graph --decorate --abbrev --oneline
-lola = log --graph --decorate --abbrev --oneline --all
+lol = log --graph --decorate --abbrev --oneline --show-signature
+lola = log --graph --decorate --abbrev --oneline --show-signature --all
 tidy = rebase -i @{upstream}..
 theirs = git cherry-pick --strategy=recursive -X theirs
 preserve = rebase --preserve-merges
@@ -74,3 +74,8 @@ cmd = emacsclient -nw -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"
 # [diff "hex"]
 # textconv = hexdump -v -C
 # binary = true
+
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg

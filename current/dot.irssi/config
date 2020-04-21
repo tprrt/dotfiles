@@ -54,8 +54,8 @@ chatnets = {
     max_modes = "4";
     max_whois = "1";
     sasl_mechanism = "PLAIN";
-    sasl_username = "tprrt";
-    sasl_password = "FOO BAR";
+    sasl_username = "FOO";
+    sasl_password = "BAR";
   };
   GameSurge = {
     type = "IRC";
@@ -135,7 +135,9 @@ channels = (
   { name = "#riot-os"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#recalbox"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#tetaneutral.net"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#capitoledulibre"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#stm32"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#qemu"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#scons"; chatnet = "Freenode"; autojoin = "no"; }
 );
 
