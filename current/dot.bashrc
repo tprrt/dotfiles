@@ -16,18 +16,10 @@ export PATH
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
-# [ -r /home/tperrot/.byobu/prompt ] && . /home/tperrot/.byobu/prompt   #byobu-prompt#
+[ -r /home/tperrot/.byobu/prompt ] && . /home/tperrot/.byobu/prompt   #byobu-prompt#
 
 # home binaries
 export PATH="$HOME/dev/bin:$PATH"
-
-# ccache
-export USE_CCACHE=1
-export CCACHE_DIR=$HOME/.ccache
-export PATH="/usr/lib64/ccache/:$PATH"
-
-# gpg
-export GPG_TTY=$(tty)
 
 # functions
 function logless { ccze -A < $1 | less -R; }
@@ -48,4 +40,3 @@ alias mkdir='mkdir -p -v'
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
 alias picocom="picocom --escape x --imap lfcrlf"
-
