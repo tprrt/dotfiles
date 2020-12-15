@@ -31,6 +31,7 @@ function kclip { xclip -sel clip < $HOME/.ssh/id_rsa.pub; }
 alias emacs='emacs -nw'
 alias emacsclient='emacsclient -nw'
 alias diff='colordiff -Nurp'
+alias ip='ip -c'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -40,3 +41,4 @@ alias mkdir='mkdir -p -v'
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
 alias picocom="picocom --escape x --imap lfcrlf"
+alias termbin="nc termbin.com 9999"
