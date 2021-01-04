@@ -21,6 +21,9 @@ export PATH
 # home binaries
 export PATH="$HOME/dev/bin:$PATH"
 
+# circle-ci
+export TOKEN="FOOBAR"
+
 # functions
 function logless { ccze -A < $1 | less -R; }
 function logtail { tail -f $1 | ccze -A; }
@@ -33,6 +36,7 @@ alias emacsclient='emacsclient -nw'
 alias diff='colordiff -Nurp'
 alias ip='ip -c'
 alias cp='cp -i'
+alias less="less -r"
 alias mv='mv -i'
 alias rm='rm -i'
 alias df='df -h'
@@ -42,3 +46,4 @@ alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
 alias picocom="picocom --escape x --imap lfcrlf"
 alias termbin="nc termbin.com 9999"
+alias tree="tree -C"
