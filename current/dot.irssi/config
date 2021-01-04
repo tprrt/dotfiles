@@ -19,7 +19,7 @@ servers = (
     port = "6697";
     use_tls = "yes";
     tls_verify = "yes";
-    autoconnect = "no";
+    autoconnect = "yes";
   },
   {
     address = "irc.gamesurge.net";
@@ -180,28 +180,30 @@ channels = (
   { name = "#capitoledulibre"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#coreboot"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#edev"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#elinux"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#elinux"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#etherboot"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#fedora"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#fedora-coreos"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#freenode"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#gentoo"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#irssi"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#kernel"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#linux"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#kernel"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#linux"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#musl"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#mvlinux"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#oe"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#oe"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#qemu"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#raspberrypi"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#recalbox"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#riot-os"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#stm32"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#tetaneutral.net"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#u-boot"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#yocto"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#u-boot"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#yocto"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#zephyrproject"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#fe"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; }
+  { name = "#fe"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; },
+  { name = "#fe-internal"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; },
+  { name = "#fe-staff"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; }
 );
 
 aliases = {
