@@ -3,18 +3,30 @@ ui = auto
 
 [user]
 name = "Thomas Perrot"
-email = "thomas.perrot@tupi.fr"
+
+email = "thomas.perrot@bootlin.com"
 signingkey = FOOBAR
 
+# email = "thomas.perrot@tupi.fr"
+# signingkey = FOOBAR
+
 [sendemail]
-smtpserver = smtp.gmail.com
-smtpserverport = 587
-smtpencryption = tls
 tocover = 1
 cccover = 1
-from = Thomas Perrot <thomas.perrot@tupi.fr>
-smtpuser = FOO
-smtppass = BAR
+
+smtpserver = mail.gandi.net
+smtpserverport = 587
+smtpencryption = tls
+from = Thomas Perrot <thomas.perrot@bootlin.com>
+smtpuser = FOOBAR
+smtppass = FOOBAR
+
+# smtpServer = smtp.gmail.com
+# smtpServerPort = 587
+# smtpEncryption = tls
+# from = Thomas Perrot <thomas.perrot@tupi.fr>
+# smtpuser = FOOBAR
+# smtppass = FOOBAR
 
 [core]
 # autocrlf = input
@@ -50,9 +62,6 @@ tidy = rebase -i @{upstream}..
 theirs = git cherry-pick --strategy=recursive -X theirs
 preserve = rebase --preserve-merges
 
-# git@github.com:albfan/git-changemail.git
-# git clone https://github.com/albfan/git-backup-clean
-
 [mergetool]
 prompt = False
 
@@ -76,6 +85,7 @@ cmd = emacsclient -nw -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"
 # binary = true
 
 [commit]
-	gpgsign = true
+gpgsign = true
+
 [gpg]
-	program = gpg
+program = gpg
