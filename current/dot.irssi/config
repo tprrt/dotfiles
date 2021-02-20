@@ -198,6 +198,7 @@ channels = (
   { name = "#riot-os"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#stm32"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#tetaneutral.net"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#toulibre"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#u-boot"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#yocto"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#zephyrproject"; chatnet = "Freenode"; autojoin = "No"; },
