@@ -4,22 +4,15 @@ ui = auto
 [user]
 name = "Thomas Perrot"
 
-email = "thomas.perrot@bootlin.com"
-signingkey = FOOBAR
-
 # email = "thomas.perrot@tupi.fr"
 # signingkey = FOOBAR
+
+email = "thomas.perrot@bootlin.com"
+signingkey = FOOBAR
 
 [sendemail]
 tocover = 1
 cccover = 1
-
-smtpserver = mail.gandi.net
-smtpserverport = 587
-smtpencryption = tls
-from = Thomas Perrot <thomas.perrot@bootlin.com>
-smtpuser = FOOBAR
-smtppass = FOOBAR
 
 # smtpServer = smtp.gmail.com
 # smtpServerPort = 587
@@ -28,10 +21,21 @@ smtppass = FOOBAR
 # smtpuser = FOOBAR
 # smtppass = FOOBAR
 
+smtpserver = mail.gandi.net
+smtpserverport = 587
+smtpencryption = tls
+from = Thomas Perrot <thomas.perrot@bootlin.com>
+smtpuser = FOOBAR
+smtppass = FOOBAR
+
 [core]
+abbrev = 12
 # autocrlf = input
-# safecrlf = true
 editor = emacs -nw
+# safecrlf = true
+
+[pretty]
+fixes = Fixes: %h (\"%s\")
 
 [color]
 ui = auto
