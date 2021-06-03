@@ -1,68 +1,12 @@
 servers = (
-  { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
-  {
-    address = "ssl.efnet.org";
-    chatnet = "EFNet";
-    port = "9999";
-    use_tls = "yes";
-  },
-  {
-    address = "irc.esper.net";
-    chatnet = "EsperNet";
-    port = "6697";
-    use_tls = "yes";
-    tls_verify = "yes";
-  },
   {
     address = "chat.freenode.net";
     chatnet = "Freenode";
     port = "6697";
     use_tls = "yes";
+    tls_cert = "~/.irssi/certs/tprrt.pem";
     tls_verify = "yes";
-    autoconnect = "yes";
-  },
-  {
-    address = "irc.gamesurge.net";
-    chatnet = "GameSurge";
-    port = "6667";
-  },
-  {
-    address = "eu.irc6.net";
-    chatnet = "IRCnet";
-    port = "6667";
-    use_tls = "yes";
-  },
-  { address = "open.ircnet.net"; chatnet = "IRCnet"; port = "6667"; },
-  {
-    address = "irc.ircsource.net";
-    chatnet = "IRCSource";
-    port = "6667";
-  },
-  { address = "irc.netfuze.net"; chatnet = "NetFuze"; port = "6667"; },
-  {
-    address = "irc.oftc.net";
-    chatnet = "OFTC";
-    port = "6697";
-    use_tls = "yes";
-    tls_verify = "yes";
-  },
-  { 
-    address = "irc.quakenet.org";
-    chatnet = "QuakeNet";
-    port = "6667";
-  },
-  {
-    address = "irc.rizon.net";
-    chatnet = "Rizon";
-    port = "6697";
-    use_tls = "yes";
-    tls_verify = "yes";
-  },
-  { address = "silc.silcnet.org"; chatnet = "SILC"; port = "706"; },
-  { 
-    address = "irc.undernet.org";
-    chatnet = "Undernet";
-    port = "6667";
+    autoconnect = "no";
   },
   {
     address = "irc.bootlin.com";
@@ -70,31 +14,28 @@ servers = (
     port = "443";
     password = "FOOBAR";
     use_tls = "yes";
+    tls_cert = "~/.irssi/certs/tprrt.pem";
+    tls_verify = "yes";
+    autoconnect = "yes";
+  },
+  {
+    address = "irc.libera.chat";
+    chatnet = "Libera";
+    port = "6697";
+    use_tls = "yes";
+    tls_cert = "~/.irssi/certs/tprrt.pem";
     tls_verify = "yes";
     autoconnect = "yes";
   }
 );
 
 chatnets = {
-  DALnet = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "4";
-    max_msgs = "20";
-    max_whois = "30";
-  };
-  EFNet = {
+  Bootlin = {
     type = "IRC";
     nick = "tprrt";
     max_kicks = "1";
     max_msgs = "4";
-    max_whois = "1";
-  };
-  EsperNet = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "4";
+    max_modes = "4";
     max_whois = "1";
   };
   Freenode = {
@@ -108,106 +49,73 @@ chatnets = {
     sasl_username = "tprrt";
     sasl_password = "FOOBAR";
   };
-  Bootlin = {
+  Libera = {
     type = "IRC";
     nick = "tprrt";
     max_kicks = "1";
     max_msgs = "4";
     max_modes = "4";
     max_whois = "1";
-  };
-  GameSurge = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "1";
-    max_whois = "1";
-  };
-  IRCnet = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "1";
-    max_whois = "1";
-  };
-  IRCSource = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "4";
-    max_whois = "1";
-  };
-  NetFuze = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "1";
-    max_whois = "1";
-  };
-  OFTC = { type = "IRC"; max_kicks = "1"; max_msgs = "1"; max_whois = "1"; };
-  QuakeNet = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "1";
-    max_whois = "1";
-  };
-  Rizon = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "1";
-    max_whois = "1";
-  };
-  SILC = { type = "SILC"; };
-  Undernet = {
-    type = "IRC";
-    nick = "tprrt";
-    max_kicks = "1";
-    max_msgs = "1";
-    max_whois = "1";
+    sasl_mechanism = "PLAIN";
+    sasl_username = "tprrt";
+    sasl_password = "FOOBAR";
   };
 };
 
 channels = (
-  { name = "#alpine-linux"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#alpine-devel"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#archlinux"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#april"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#beaglebone"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#busybox"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#debian"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#capitoledulibre"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#coreboot"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#edev"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#elinux"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#etherboot"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#fedora"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#fedora-coreos"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#freecad"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#freenode"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#gentoo"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#irssi"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#kernel"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "#linux"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#musl"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#mvlinux"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#oe"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "#qemu"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#raspberrypi"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#recalbox"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#reprap"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#riot-os"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#stm32"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#tetaneutral.net"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#toulibre"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#u-boot"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "#yocto"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "#yp-infra"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "#zephyrproject"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#fe"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; },
-  { name = "#fe-internal"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; },
-  { name = "#fe-staff"; chatnet = "Bootlin"; autojoin = "yes"; password = "FOOBAR"; }
+  { name = "#alpine-linux"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#alpine-devel"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#archlinux"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#april"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#beaglebone"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#busybox"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#debian"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#capitoledulibre"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#coreboot"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#edev"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#elinux"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#etherboot"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#fedora"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#fedora-coreos"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#freecad"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#libera"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#gentoo"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#irssi"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#kernel"; chatnet = "Libera"; autojoin = "Yes"; },
+  { name = "#linux"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#musl"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#mvlinux"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#oe"; chatnet = "Libera"; autojoin = "Yes"; },
+  { name = "#qemu"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#raspberrypi"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#recalbox"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#reprap"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#riot-os"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#stm32"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#tetaneutral.net"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#toulibre"; chatnet = "Libera"; autojoin = "No"; },
+  { name = "#u-boot"; chatnet = "Libera"; autojoin = "Yes"; },
+  { name = "#yocto"; chatnet = "Libera"; autojoin = "Yes"; },
+  { name = "#yp-infra"; chatnet = "Libera"; autojoin = "Yes"; },
+  { name = "#zephyrproject"; chatnet = "Libera"; autojoin = "No"; },
+  {
+    name = "#fe";
+    chatnet = "Bootlin";
+    autojoin = "yes";
+    password = "FOOBAR";
+  },
+  {
+    name = "#fe-internal";
+    chatnet = "Bootlin";
+    autojoin = "yes";
+    password = "FOOBAR";
+  },
+  {
+    name = "#fe-staff";
+    chatnet = "Bootlin";
+    autojoin = "yes";
+    password = "FOOBAR";
+  }
 );
 
 aliases = {
@@ -367,3 +275,4 @@ settings = {
   "fe-text" = { actlist_sort = "refnum"; };
   "fe-common/core" = { autolog = "yes"; };
 };
+logs = { };
