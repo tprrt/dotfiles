@@ -25,7 +25,7 @@ export PATH="$HOME/dev/bin:$PATH"
 export TOKEN="FOOBAR"
 
 # bootlin
-# export FEINTRAGIT="$HOME/dev/bootlin/intragit"
+export FEINTRAGIT="$HOME/dev/bootlin/intragit"
 
 # functions
 function logless { ccze -A < $1 | less -R; }
@@ -47,6 +47,6 @@ alias du='du -c -h'
 alias mkdir='mkdir -p -v'
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
-alias picocom="picocom --escape x --imap lfcrlf"
+alias picocom="picocom --escape x -b 115200 --imap lfcrlf --quiet"
 alias tb="nc termbin.com 9999"
 alias tree="tree -C"
