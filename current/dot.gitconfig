@@ -17,14 +17,14 @@ cccover = 1
 # smtpServer = smtp.gmail.com
 # smtpServerPort = 587
 # smtpEncryption = tls
-# from = Thomas Perrot <thomas.perrot@tupi.fr>
+# from = thomas.perrot@tupi.fr
 # smtpuser = FOOBAR
 # smtppass = FOOBAR
 
 smtpserver = mail.gandi.net
 smtpserverport = 587
 smtpencryption = tls
-from = Thomas Perrot <thomas.perrot@bootlin.com>
+from = thomas.perrot@bootlin.com
 smtpuser = FOOBAR
 smtppass = FOOBAR
 
@@ -93,3 +93,6 @@ gpgsign = true
 
 [gpg]
 program = gpg
+
+[credential]
+helper = store
