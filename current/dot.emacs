@@ -24,3 +24,17 @@
 
 (add-hook 'prog-mode-hook
           (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
+(require 'generic-x)
+(define-generic-mode 'bootlin-weekly-mode
+  nil                                                      ;; no syntax for comments
+  '("Monday" "Tuesday" "Wednesday" "Thursday" "Friday")    ;; keywords
+  '(("[01]\.[0-9]d$" . 'font-lock-warning-face)
+    ("[01]d$" . 'font-lock-warning-face)
+    ("^ \\* [A-Za-z0-9- ]+" . 'font-lock-function-name-face)
+    ("^ \\* \\([A-Za-z0-9-, ]+\\)" . 'font-lock-comment-face)
+    )
+  '("week[0-9][0-9]\\.txt$")                               ;; file pattern
+  nil                                                      ;; other functions to call
+  "A mode for Bootlin weekly files"                        ;; description
+  )
