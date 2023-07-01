@@ -28,7 +28,7 @@
 (require 'generic-x)
 (define-generic-mode 'bootlin-weekly-mode
   nil                                                      ;; no syntax for comments
-  '("Monday" "Tuesday" "Wednesday" "Thursday" "Friday")    ;; keywords
+  '("Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday")    ;; keywords
   '(("[01]\.[0-9]d$" . 'font-lock-warning-face)
     ("[01]d$" . 'font-lock-warning-face)
     ("^ \\* [A-Za-z0-9- ]+" . 'font-lock-function-name-face)
