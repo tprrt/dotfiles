@@ -32,6 +32,7 @@ function logless { ccze -A < $1 | less -R; }
 function logtail { tail -f $1 | ccze -A; }
 function epass { openssl passwd -1 $1; }
 function kclip { xclip -sel clip < $HOME/.ssh/id_rsa.pub; }
+function wttrin { curl https://wttr.in/$1; }
 
 # alias
 alias emacs='emacs -nw'
@@ -47,6 +48,6 @@ alias du='du -c -h'
 alias mkdir='mkdir -p -v'
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
-alias picocom="picocom --escape x -b 115200 --imap lfcrlf --quiet"
+alias picocom="picocom --escape x -b 115200 --omap crcrlf --quiet"
 alias tb="nc termbin.com 9999"
 alias tree="tree -C"
