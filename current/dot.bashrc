@@ -35,19 +35,20 @@ function kclip { xclip -sel clip < $HOME/.ssh/id_rsa.pub; }
 function wttrin { curl https://wttr.in/$1; }
 
 # alias
+alias cp='cp -i'
+alias df='df -h'
+alias diff='colordiff -Nurp'
+alias du='du -c -h'
 alias emacs='emacs -nw'
 alias emacsclient='emacsclient -nw'
-alias diff='colordiff -Nurp'
+alias htop='htop --readonly --tree'
 alias ip='ip -c'
-alias cp='cp -i'
 alias less="less -r"
-alias mv='mv -i'
-alias rm='rm -i'
-alias df='df -h'
-alias du='du -c -h'
 alias mkdir='mkdir -p -v'
+alias mv='mv -i'
+alias picocom="picocom --escape x -b 115200 --omap crcrlf --quiet"
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
-alias picocom="picocom --escape x -b 115200 --omap crcrlf --quiet"
+alias rm='rm -i'
 alias tb="nc termbin.com 9999"
 alias tree="tree -C"
