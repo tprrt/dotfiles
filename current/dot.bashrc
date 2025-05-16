@@ -21,8 +21,11 @@ export PATH
 # home binaries
 export PATH="$HOME/dev/bin:$PATH"
 
-# circle-ci
-export TOKEN="FOOBAR"
+# tokens
+# export CIRLECI_TOKEN="FOOBAR"
+# export GH_TOKEN="FOOBAR"
+# export DOCKERHUB_TOKEN="FOOBAR"
+# export MISTRAL_API_KEY="FOOBAR"
 
 # bootlin
 export FEINTRAGIT="$HOME/dev/bootlin/intragit"
@@ -39,16 +42,20 @@ alias cp='cp -i'
 alias df='df -h'
 alias diff='colordiff -Nurp'
 alias du='du -c -h'
+alias duckchat='duckchat -y -m 4'
 alias emacs='emacs -nw'
 alias emacsclient='emacsclient -nw'
-alias htop='htop --readonly --tree'
+alias htop='htop --readonly'
 alias ip='ip -c'
 alias less="less -r"
 alias mkdir='mkdir -p -v'
 alias mv='mv -i'
-alias picocom="picocom --escape x -b 115200 --omap crcrlf --quiet"
+alias picocom="picocom --escape x -b 115200 --quiet"
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
 alias rm='rm -i'
 alias tb="nc termbin.com 9999"
 alias tree="tree -C"
+
+export PATH="${HOME}/.npm-global/bin:$PATH"
+
