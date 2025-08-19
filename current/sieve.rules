@@ -1,9 +1,10 @@
-require ["fileinto","imap4flags","regex"];
+require ["body","copy","fileinto","imap4flags","mailbox","regex","variables"];
 
 # ====
 # SPAM
 # ====
 
+# Legacy spam detection
 if anyof (address :contains "to" "info@free-electrons.com") {
     fileinto "Junk";
     addflag "Junk";
@@ -22,15 +23,161 @@ if allof (header :contains ["X-GND-Status"] ["SPAM"], header :regex ["X-GND-Spam
     stop;
 }
 
+# Standard spam headers (but exclude legitimate mailing lists)
+if allof (
+    anyof (
+        header :contains "X-Spam-Flag" "YES",
+        header :contains "X-Spam-Status" "Yes",
+        header :regex "X-Spam-Score" "^([5-9]|[1-9][0-9]+)(\\.[0-9]+)?",
+        header :regex "X-Spam-Level" "\\*\\*\\*\\*\\*"
+    ),
+    not anyof (
+        header :contains "List-Id" "vger.kernel.org",
+        header :contains "List-Id" "lists.yoctoproject.org",
+        header :contains "List-Id" "lists.openembedded.org",
+        header :contains "List-Id" "lists.zephyrproject.org",
+        header :contains "List-Id" "lists.freedesktop.org",
+        header :contains "List-Id" "lists.bootlin.com",
+        header :contains "List-Id" "lists.trustedfirmware.org",
+        header :contains "List-Id" "lists.infradead.org",
+        header :contains "List-Id" "buildroot.org",
+        header :contains "List-Id" "busybox.net"
+
+    )
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Common phishing and suspicious patterns
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(urgent|action.*required|verify.*account|suspended|locked|expire|confirm|update.*payment)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(winner|lottery|congratulations|inheritance|million|deposit)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(viagra|cialis|pharmacy|pills|medication|enhancement)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(earn.*money|work.*from.*home|make.*\\$|investment|profit)"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Suspicious sender patterns
+if anyof (
+    address :regex :comparator "i;ascii-casemap" "from" "no-?reply@.*(tk|ml|ga|cf)",
+    address :regex "from" "[0-9]+@",
+    header :regex :comparator "i;ascii-casemap" "From" "(noreply|no-reply)@.*(tk|ml|ga|cf|info|biz)",
+    header :contains "From" "undisclosed-recipients"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Missing or suspicious headers
+if anyof (
+    not exists "Message-ID",
+    not exists "Date",
+    header :regex "Received" "^\s*$"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Bulk/mass mailing indicators (excluding legitimate mailing lists)
+if anyof (
+    header :contains "X-Mailer" "Mass",
+    header :contains "X-Mailer" "Bulk",
+    header :contains "X-Priority" "5"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Bulk emails without proper mailing list headers
+if allof (
+    header :regex :comparator "i;ascii-casemap" "Precedence" "^(bulk|junk)$",
+    not exists "List-Id",
+    not exists "List-Unsubscribe"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Suspicious attachment patterns
+if header :regex :comparator "i;ascii-casemap" "Content-Type" "application/(exe|bat|com|scr|vbs|jar|zip)" {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# HTML-only emails with suspicious content
+if allof (
+    header :contains "Content-Type" "text/html",
+    not header :contains "Content-Type" "text/plain"
+) {
+    if body :regex :comparator "i;ascii-casemap" "<a[^>]*href[^>]*>(click|download|verify|update|confirm)" {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Charset obfuscation attempts (but exclude legitimate mailing lists and business emails)
+if allof (
+    header :regex "Content-Type" "charset=(koi8|windows-125[0-9]|iso-8859-[0-9]+)",
+    not exists "List-Id",
+    not exists "List-Unsubscribe",
+    not address :contains ["from", "to", "cc"] "bootlin.com"
+) {
+    if body :regex :comparator "i;ascii-casemap" "(urgent|winner|viagra|cialis|loan|investment)" {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Reputation-based filtering
+if anyof (
+    allof (
+        header :regex "Received" "\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\]",
+        not header :contains "Received" "kernel.org",
+        not header :contains "Received" "kernel.org",
+        not header :contains "Received" "denx.de",
+        not header :contains "Received" "denx.de",
+        not header :contains "Received" "google.com",
+        not header :contains "Received" "google.com",
+        not header :contains "Received" "galae.net",
+        not header :contains "Received" "galae.net",
+        not header :contains "Received" "bootlin.com",
+        not exists "List-Id",
+        not exists "List-Unsubscribe"
+    ),
+    header :contains "Received" "unknown",
+    header :regex "Received" "\\.(tk|ml|ga|cf)\\s"
+) {
+    if header :regex :comparator "i;ascii-casemap" "Subject" "(re:|fwd:)" {
+        # Allow replies and forwards even from suspicious IPs - do nothing
+    } else {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
 # =========
 # Filtering
 # =========
 
-if allof (address :contains "from" "thomas.perrot@bootlin.com") {
+if address :contains "from" "thomas.perrot@bootlin.com" {
     addflag "$label1";
+    stop;
 }
 
-if anyof (address :contains ["to", "cc"] "buildroot@buildroot.org", address :contains ["to", "cc"] "buildroot@busybox.net", address :contains ["to", "cc"] "buildroot@uclibc.org") {
+if allof (address :contains ["to", "cc"] ["buildroot@buildroot.org", "buildroot@busybox.net"]) {
     fileinto "INBOX/Buildroot";
     stop;
 }
@@ -78,7 +225,6 @@ if anyof (address :contains ["to", "cc"] "bugzilla-daemon@yoctoproject.org", add
 if allof (address :contains "from" "controller@yoctoproject.org") {
     fileinto "INBOX/Yocto/controller";
     stop;
-
 }
 
 if allof (address :contains ["to", "cc"] "main@lists.yoctoproject.org") {
@@ -234,7 +380,6 @@ if allof (address :contains ["to", "cc"] "ivenix@lists.bootlin.com") {
 if allof (address :contains ["to", "cc"] "keysight@lists.bootlin.com") {
     fileinto "INBOX/Bootlin/keysight";
     stop;
-
 }
 
 if allof (address :contains ["to", "cc"] "permanentstaff@bootlin.com") {
@@ -242,7 +387,7 @@ if allof (address :contains ["to", "cc"] "permanentstaff@bootlin.com") {
     stop;
 }
 
-if allof (header :regex :comparator "i;octet" "subject" "\\[projects/[a-zA-Z]+]\\s+[a-zA-Z]+") {
+if header :regex :comparator "i;ascii-casemap" "subject" "\\[projects/[a-zA-Z0-9_-]+\\]\\s+" {
     fileinto "INBOX/Bootlin/projects";
     stop;
 }
@@ -315,10 +460,4 @@ if allof (address :contains ["to", "cc"] "main@lists.zephyrproject.org") {
 if allof (address :contains ["to", "cc"] "users@lists.zephyrproject.org") {
     fileinto "INBOX/Zephyr/users";
     stop;
-}
-
-# Catch remaining Bootlin emails
-if allof (address :contains ["to", "cc"] "thomas.perrot@bootlin.com") {
-    addflag "$label4";
-    fileinto "INBOX";
 }
