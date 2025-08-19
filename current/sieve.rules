@@ -1,0 +1,324 @@
+require ["fileinto","imap4flags","regex"];
+
+# ====
+# SPAM
+# ====
+
+if anyof (address :contains "to" "info@free-electrons.com") {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+if header :contains ["X-GND-Status"] ["MCE","PCE"] {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+if allof (header :contains ["X-GND-Status"] ["SPAM"], header :regex ["X-GND-Spam-Score"] ["[2-4][0-9][0-9]"]) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# =========
+# Filtering
+# =========
+
+if allof (address :contains "from" "thomas.perrot@bootlin.com") {
+    addflag "$label1";
+}
+
+if anyof (address :contains ["to", "cc"] "buildroot@buildroot.org", address :contains ["to", "cc"] "buildroot@busybox.net", address :contains ["to", "cc"] "buildroot@uclibc.org") {
+    fileinto "INBOX/Buildroot";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "bitbake-devel@lists.openembedded.org") {
+    fileinto "INBOX/OpenEmbedded/bitbake-devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "openembedded-core@lists.openembedded.org") {
+    fileinto "INBOX/OpenEmbedded/openembedded-core";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "openembedded-devel@lists.openembedded.org") {
+    fileinto "INBOX/OpenEmbedded/openembedded-devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "openembedded-architecture@lists.openembedded.org") {
+    fileinto "INBOX/OpenEmbedded/openembedded-architecture";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "yocto@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "yocto-announce@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/yocto-announce";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "automated-testing@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/automated-testing";
+    stop;
+}
+
+if anyof (address :contains ["to", "cc"] "bugzilla-daemon@yoctoproject.org", address :contains "from" "bugzilla-daemon@yoctoproject.org") {
+    fileinto "INBOX/Yocto/bugzilla";
+    stop;
+}
+
+if allof (address :contains "from" "controller@yoctoproject.org") {
+    fileinto "INBOX/Yocto/controller";
+    stop;
+
+}
+
+if allof (address :contains ["to", "cc"] "main@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/main";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "meta-arm@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/meta-arm";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "meta-freescale@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/meta-freescale";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "meta-ti@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/meta-ti";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "meta-virtualization@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/meta-virtualization";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "yocto-patches@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/yocto-patches";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "poky@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/poky";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "swat@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/swat";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "yocto-status@lists.yoctoproject.org") {
+    fileinto "INBOX/Yocto/yocto-status";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "u-boot@lists.denx.de") {
+    fileinto "INBOX/U-Boot";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-arm-msm@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-arm-msm";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-rt-users@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-rt-users";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-newbie@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-newbie";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-kernel-announce@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-kernel-announce";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-embedded@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-embedded";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-c-programming@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-c-programming";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-kernel@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-kernel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "kernel-janitors@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-kernel-janitors";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "devicetree@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-devicetree";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "netdev@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-netdev";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-riscv@lists.infradead.org") {
+    fileinto "INBOX/Linux/linux-riscv";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "soc@kernel.org") {
+    fileinto "INBOX/Linux/linux-soc";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-spi@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-spi";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "stable@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-stable";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "linux-wireless@vger.kernel.org") {
+    fileinto "INBOX/Linux/linux-wireless";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "consumption@bootlin.com") {
+    fileinto "INBOX/Bootlin/consumption";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "accounting@bootlin.com") {
+    fileinto "INBOX/Bootlin/accounting";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "info@bootlin.com") {
+    fileinto "INBOX/Bootlin/info";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "internalstaff@bootlin.com") {
+    fileinto "INBOX/Bootlin/internalstaff";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "ivenix@lists.bootlin.com") {
+    fileinto "INBOX/Bootlin/ivenix";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "keysight@lists.bootlin.com") {
+    fileinto "INBOX/Bootlin/keysight";
+    stop;
+
+}
+
+if allof (address :contains ["to", "cc"] "permanentstaff@bootlin.com") {
+    fileinto "INBOX/Bootlin/permanentstaff";
+    stop;
+}
+
+if allof (header :regex :comparator "i;octet" "subject" "\\[projects/[a-zA-Z]+]\\s+[a-zA-Z]+") {
+    fileinto "INBOX/Bootlin/projects";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "trainingstaff@bootlin.com") {
+    fileinto "INBOX/Bootlin/trainingstaff";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "technicalstaff@bootlin.com") {
+    fileinto "INBOX/Bootlin/technicalstaff";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "libmbim-devel@lists.freedesktop.org") {
+    fileinto "INBOX/Misc/libmbim-devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "modemmanager-devel@lists.freedesktop.org") {
+    fileinto "INBOX/Misc/modemmanager-devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "kas-devel@googlegroups.com") {
+    fileinto "INBOX/Misc/kas-devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "libqmi-devel@lists.freedesktop.org") {
+    fileinto "INBOX/Misc/libqmi-devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "op-tee@lists.trustedfirmware.org") {
+    fileinto "INBOX/op-tee";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "opensbi@lists.infradead.org") {
+    fileinto "INBOX/OpenSBI";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "tf-a@lists.trustedfirmware.org") {
+    fileinto "INBOX/TF-A";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "tf-m@lists.trustedfirmware.org") {
+    fileinto "INBOX/TF-M";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "announce@lists.zephyrproject.org") {
+    fileinto "INBOX/Zephyr";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "devel@lists.zephyrproject.org") {
+    fileinto "INBOX/Zephyr/devel";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "main@lists.zephyrproject.org") {
+    fileinto "INBOX/Zephyr/main";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "users@lists.zephyrproject.org") {
+    fileinto "INBOX/Zephyr/users";
+    stop;
+}
+
+# Catch remaining Bootlin emails
+if allof (address :contains ["to", "cc"] "thomas.perrot@bootlin.com") {
+    addflag "$label4";
+    fileinto "INBOX";
+}
