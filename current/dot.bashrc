@@ -58,4 +58,5 @@ alias tb="nc termbin.com 9999"
 alias tree="tree -C"
 
 export PATH="${HOME}/.npm-global/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
 
