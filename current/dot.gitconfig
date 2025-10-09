@@ -14,14 +14,14 @@ signingkey = FOOBAR
 tocover = 1
 cccover = 1
 
-# smtpServer = smtp.gmail.com
-# smtpServerPort = 587
-# smtpEncryption = tls
+# smtpServer = smtp.protonmail.ch
+# smtpServerPort = 465
+# smtpEncryption = ssl
 # from = thomas.perrot@tupi.fr
 # smtpuser = FOOBAR
 # smtppass = FOOBAR
 
-smtpserver = mail.gandi.net
+smtpserver = mail.galae.net
 smtpserverport = 587
 smtpencryption = tls
 from = thomas.perrot@bootlin.com
@@ -95,4 +95,7 @@ gpgsign = true
 program = gpg
 
 [credential]
-helper = store
+helper = store --file=/home/tperrot/.git-credentials
+
+# [http]
+# cookieFile = "/home/tperrot/cookies.txt"
