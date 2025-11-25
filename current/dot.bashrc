@@ -41,6 +41,7 @@ function wttrin { curl https://wttr.in/$1; }
 alias cp='cp -i'
 alias df='df -h'
 alias diff='colordiff -Nurp'
+alias dmacs='doom emacs -nw'
 alias du='du -c -h'
 alias duckchat='duckchat -y -m 4'
 alias emacs='emacs -nw'
@@ -53,10 +54,10 @@ alias mv='mv -i'
 alias picocom="picocom --escape x -b 115200 --quiet"
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
+alias pyhttp="python -m http.server"
 alias rm='rm -i'
 alias tb="nc termbin.com 9999"
 alias tree="tree -C"
 
 export PATH="${HOME}/.npm-global/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
-
