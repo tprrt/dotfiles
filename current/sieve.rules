@@ -41,8 +41,8 @@ if allof (
         header :contains "List-Id" "lists.trustedfirmware.org",
         header :contains "List-Id" "lists.infradead.org",
         header :contains "List-Id" "buildroot.org",
-        header :contains "List-Id" "busybox.net"
-
+        header :contains "List-Id" "busybox.net",
+        header :contains "List-Id" "nongnu.org"
     )
 ) {
     fileinto "Junk";
@@ -429,6 +429,11 @@ if allof (address :contains ["to", "cc"] "op-tee@lists.trustedfirmware.org") {
 
 if allof (address :contains ["to", "cc"] "opensbi@lists.infradead.org") {
     fileinto "INBOX/OpenSBI";
+    stop;
+}
+
+if allof (address :contains ["to", "cc"] "qemu-riscv@nongnu.org") {
+    fileinto "INBOX/Qemu";
     stop;
 }
 
