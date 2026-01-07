@@ -28,7 +28,7 @@ if allof (
     anyof (
         header :contains "X-Spam-Flag" "YES",
         header :contains "X-Spam-Status" "Yes",
-        header :regex "X-Spam-Score" "^([5-9]|[1-9][0-9]+)(\\.[0-9]+)?",
+        header :regex "X-Spam-Score" "^([5-9]|[1-9][0-9]+)(\\.[0-9]+)?",  # Catches scores ≥5.0
         header :regex "X-Spam-Level" "\\*\\*\\*\\*\\*"
     ),
     not anyof (
@@ -56,6 +56,28 @@ if anyof (
     header :regex :comparator "i;ascii-casemap" "Subject" "(winner|lottery|congratulations|inheritance|million|deposit)",
     header :regex :comparator "i;ascii-casemap" "Subject" "(viagra|cialis|pharmacy|pills|medication|enhancement)",
     header :regex :comparator "i;ascii-casemap" "Subject" "(earn.*money|work.*from.*home|make.*\\$|investment|profit)"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Cryptocurrency and gift card scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(bitcoin|btc|ethereum|eth|crypto|blockchain|nft|wallet)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(gift.*card|amazon.*card|itunes|google.*play|steam.*card)",
+    body :regex :comparator "i;ascii-casemap" "(send.*bitcoin|crypto.*wallet|blockchain.*investment|nft.*opportunity)"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Fake reply abuse (Re: without proper In-Reply-To or References headers)
+if allof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "^(re:|fwd?):",
+    not exists "In-Reply-To",
+    not exists "References"
 ) {
     fileinto "Junk";
     addflag "Junk";
@@ -145,12 +167,8 @@ if anyof (
     allof (
         header :regex "Received" "\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\]",
         not header :contains "Received" "kernel.org",
-        not header :contains "Received" "kernel.org",
-        not header :contains "Received" "denx.de",
         not header :contains "Received" "denx.de",
         not header :contains "Received" "google.com",
-        not header :contains "Received" "google.com",
-        not header :contains "Received" "galae.net",
         not header :contains "Received" "galae.net",
         not header :contains "Received" "bootlin.com",
         not exists "List-Id",
@@ -174,7 +192,6 @@ if anyof (
 
 if address :contains "from" "thomas.perrot@bootlin.com" {
     addflag "$label1";
-    stop;
 }
 
 if allof (address :contains ["to", "cc"] ["buildroot@buildroot.org", "buildroot@busybox.net"]) {
