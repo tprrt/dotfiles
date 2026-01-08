@@ -41,11 +41,10 @@ function wttrin { curl https://wttr.in/$1; }
 alias cp='cp -i'
 alias df='df -h'
 alias diff='colordiff -Nurp'
-alias dmacs='doom emacs -nw'
 alias du='du -c -h'
 alias duckchat='duckchat -y -m 4'
-alias emacs='emacs -nw'
-alias emacsclient='emacsclient -nw'
+alias emacs='doom emacs -nw'
+alias emacsclient='doom emacs -nw'
 alias htop='htop --readonly'
 alias ip='ip -c'
 alias less="less -r"
@@ -61,3 +60,5 @@ alias tree="tree -C"
 
 export PATH="${HOME}/.npm-global/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
+
+export SUPPRESS_BOLTDB_WARNING=1
