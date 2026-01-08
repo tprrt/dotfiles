@@ -31,7 +31,7 @@ smtppass = FOOBAR
 [core]
 abbrev = 12
 # autocrlf = input
-editor = emacs -nw
+editor = doom emacs -nw
 # safecrlf = true
 
 [pretty]
@@ -73,13 +73,13 @@ prompt = False
 tool = ediff
 
 [mergetool "ediff"]
-cmd = emacsclient -nw -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
+cmd = doom emacs -nw -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
 
 # [difftool "ediff"]
-# cmd = emacs -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+# cmd = doom emacs -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 # [difftool "ediffclient"]
-# cmd = emacsclient -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+# cmd = doom emacs -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 # [diff]
 # tool = ediffclient
@@ -97,5 +97,5 @@ program = gpg
 [credential]
 helper = store --file=/home/tperrot/.git-credentials
 
-# [http]
-# cookieFile = "/home/tperrot/cookies.txt"
+[b4]
+send-series-cc = Thomas Petazzoni <thomas.petazzoni@bootlin.com>
