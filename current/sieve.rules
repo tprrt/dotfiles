@@ -1,354 +1,5 @@
 require ["body","copy","fileinto","imap4flags","mailbox","regex","variables"];
 
-# ====
-# SPAM
-# ====
-
-# Legacy spam detection
-if anyof (address :contains "to" "info@free-electrons.com") {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-if header :contains ["X-GND-Status"] ["MCE","PCE"] {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-if allof (header :contains ["X-GND-Status"] ["SPAM"], header :regex ["X-GND-Spam-Score"] ["[2-4][0-9][0-9]"]) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Standard spam headers (but exclude legitimate mailing lists)
-if allof (
-    anyof (
-        header :contains "X-Spam-Flag" "YES",
-        header :contains "X-Spam-Status" "Yes",
-        header :regex "X-Spam-Score" "^([5-9]|[1-9][0-9]+)(\\.[0-9]+)?",  # Catches scores ≥5.0
-        header :regex "X-Spam-Level" "\\*\\*\\*\\*\\*"
-    ),
-    not anyof (
-        header :contains "List-Id" "kernel.org",
-        header :contains "List-Id" "vger.kernel.org",
-        header :contains "List-Id" "lists.yoctoproject.org",
-        header :contains "List-Id" "lists.openembedded.org",
-        header :contains "List-Id" "lists.zephyrproject.org",
-        header :contains "List-Id" "lists.freedesktop.org",
-        header :contains "List-Id" "lists.bootlin.com",
-        header :contains "List-Id" "lists.trustedfirmware.org",
-        header :contains "List-Id" "lists.infradead.org",
-        header :contains "List-Id" "buildroot.org",
-        header :contains "List-Id" "busybox.net",
-        header :contains "List-Id" "nongnu.org"
-    )
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Common phishing and suspicious patterns
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(urgent|action.*required|verify.*account|suspended|locked|expire|confirm|update.*payment)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(winner|lottery|congratulations|inheritance|million|deposit)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(viagra|cialis|pharmacy|pills|medication|enhancement)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(earn.*money|work.*from.*home|make.*\\$|investment|profit)"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Cryptocurrency and gift card scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(bitcoin|btc|ethereum|eth|crypto|blockchain|nft|wallet)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(gift.*card|amazon.*card|itunes|google.*play|steam.*card)",
-    body :regex :comparator "i;ascii-casemap" "(send.*bitcoin|crypto.*wallet|blockchain.*investment|nft.*opportunity)"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Fake reply abuse (Re: without proper In-Reply-To or References headers)
-if allof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "^(re:|fwd?):",
-    not exists "In-Reply-To",
-    not exists "References",
-    not exists "List-Id",
-    not exists "List-Unsubscribe"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Suspicious sender patterns
-if anyof (
-    address :regex :comparator "i;ascii-casemap" "from" "no-?reply@.*(tk|ml|ga|cf)",
-    address :regex "from" "[0-9]+@",
-    header :regex :comparator "i;ascii-casemap" "From" "(noreply|no-reply)@.*(tk|ml|ga|cf|info|biz)",
-    header :contains "From" "undisclosed-recipients"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Missing or suspicious headers
-if anyof (
-    not exists "Message-ID",
-    not exists "Date",
-    header :regex "Received" "^\s*$"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Bulk/mass mailing indicators (excluding legitimate mailing lists)
-if anyof (
-    header :contains "X-Mailer" "Mass",
-    header :contains "X-Mailer" "Bulk",
-    header :contains "X-Priority" "5"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Bulk emails without proper mailing list headers
-if allof (
-    header :regex :comparator "i;ascii-casemap" "Precedence" "^(bulk|junk)$",
-    not exists "List-Id",
-    not exists "List-Unsubscribe"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Suspicious attachment patterns
-if header :regex :comparator "i;ascii-casemap" "Content-Type" "application/(exe|bat|com|scr|vbs|jar|zip)" {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# HTML-only emails with suspicious content
-if allof (
-    header :contains "Content-Type" "text/html",
-    not header :contains "Content-Type" "text/plain"
-) {
-    if body :regex :comparator "i;ascii-casemap" "<a[^>]*href[^>]*>(click|download|verify|update|confirm)" {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Charset obfuscation attempts (but exclude legitimate mailing lists and business emails)
-if allof (
-    header :regex "Content-Type" "charset=(koi8|windows-125[0-9]|iso-8859-[0-9]+)",
-    not exists "List-Id",
-    not exists "List-Unsubscribe",
-    not address :contains ["from", "to", "cc"] "bootlin.com"
-) {
-    if body :regex :comparator "i;ascii-casemap" "(urgent|winner|viagra|cialis|loan|investment)" {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Reputation-based filtering
-if anyof (
-    allof (
-        header :regex "Received" "\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\]",
-        not header :contains "Received" "kernel.org",
-        not header :contains "Received" "vger.kernel.org",
-        not header :contains "Received" "denx.de",
-        not header :contains "Received" "google.com",
-        not header :contains "Received" "galae.net",
-        not header :contains "Received" "bootlin.com",
-        not header :contains "Received" "nongnu.org",
-        not header :contains "Received" "openembedded.org",
-        not header :contains "Received" "yoctoproject.org",
-        not header :contains "Received" "infradead.org",
-        not exists "List-Id",
-        not exists "List-Unsubscribe"
-    ),
-    allof (
-        header :contains "Received" "unknown",
-        not exists "List-Id",
-        not exists "List-Unsubscribe"
-    ),
-    allof (
-        header :regex "Received" "\\.(tk|ml|ga|cf)\\s",
-        not exists "List-Id",
-        not exists "List-Unsubscribe"
-    )
-) {
-    if header :regex :comparator "i;ascii-casemap" "Subject" "(re:|fwd:)" {
-        # Allow replies and forwards even from suspicious IPs - do nothing
-    } else {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Modern scam patterns (2024-2026)
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(chatgpt|ai.*tool|artificial.*intelligence|gpt-[0-9])",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(midjourney|dall-e|stable.*diffusion)"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Package delivery scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(fedex|ups|dhl|usps|delivery.*failed|parcel|package.*held|shipment)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(track.*package|delivery.*attempt|customs.*fee|redelivery)"
-) {
-    if not anyof (
-        address :contains "from" ["fedex.com", "ups.com", "dhl.com", "usps.com", "usps.gov"],
-        header :contains "List-Id" ""
-    ) {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Tech support and software scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(microsoft.*support|apple.*support|google.*support|tech.*support)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(license.*expir|software.*renew|subscription.*expir|office.*365|windows.*license)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(mcafee|norton|antivirus|security.*software)"
-) {
-    if not anyof (
-        address :contains "from" ["microsoft.com", "apple.com", "google.com"],
-        header :contains "List-Id" ""
-    ) {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Social media security alerts
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(facebook.*security|instagram.*security|linkedin.*security|twitter.*security)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(unusual.*activity|suspicious.*login|account.*compromised|security.*alert)"
-) {
-    if not anyof (
-        address :contains "from" ["facebook.com", "facebookmail.com", "instagram.com", "linkedin.com", "twitter.com"],
-        header :contains "List-Id" ""
-    ) {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Banking and financial phishing
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(paypal|venmo|zelle|cashapp|wise|revolut)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(bank.*account|credit.*card|debit.*card|unusual.*transaction)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(fraud.*alert|transaction.*declined|card.*blocked|account.*limit)"
-) {
-    if not address :contains "from" ["paypal.com", "venmo.com", "wise.com", "revolut.com"] {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# DocuSign and e-signature scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(docusign|document.*sign|e-?sign|electronic.*signature)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(sign.*document|review.*document|pending.*signature)"
-) {
-    if not anyof (
-        address :contains "from" ["docusign.com", "docusign.net"],
-        header :contains "List-Id" ""
-    ) {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Tax and government impersonation
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(irs|tax.*refund|tax.*return|hmrc|inland.*revenue)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(government.*grant|stimulus|social.*security|benefits.*payment)"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Subscription and streaming service scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(netflix|spotify|amazon.*prime|disney.*plus|hbo)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(subscription.*cancel|membership.*expir|payment.*fail|renew.*subscription)"
-) {
-    if not anyof (
-        address :contains "from" ["netflix.com", "spotify.com", "amazon.com", "disneyplus.com", "hbo.com"],
-        header :contains "List-Id" ""
-    ) {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Invoice and payment request scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(invoice.*#|payment.*request|outstanding.*balance|overdue.*payment)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(remittance|payment.*due|final.*notice|collection.*notice)"
-) {
-    if not anyof (
-        address :contains "from" "bootlin.com",
-        header :contains "List-Id" ""
-    ) {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
-
-# Remote job and work-from-home scams
-if anyof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(work.*from.*home|remote.*position|earn.*\\$[0-9]+|weekly.*paycheck)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(job.*offer|hiring.*immediately|part.*time.*income|easy.*money)",
-    header :regex :comparator "i;ascii-casemap" "Subject" "(data.*entry|online.*survey|mystery.*shopper)"
-) {
-    fileinto "Junk";
-    addflag "Junk";
-    stop;
-}
-
-# Password reset and credential phishing
-if allof (
-    header :regex :comparator "i;ascii-casemap" "Subject" "(password.*reset|password.*expir|reset.*password|change.*password)",
-    not exists "List-Id",
-    not address :contains "from" "bootlin.com"
-) {
-    if header :regex :comparator "i;ascii-casemap" "Subject" "(urgent|immediate|required|expir)" {
-        fileinto "Junk";
-        addflag "Junk";
-        stop;
-    }
-}
 
 # =========
 # Filtering
@@ -646,4 +297,366 @@ if allof (address :contains ["to", "cc"] "main@lists.zephyrproject.org") {
 if allof (address :contains ["to", "cc"] "users@lists.zephyrproject.org") {
     fileinto "INBOX/Zephyr/users";
     stop;
+}
+
+# ====
+# SPAM
+# ====
+
+# Standard spam headers
+if anyof (
+    header :contains "X-Spam-Flag" "YES",
+    header :contains "X-Spam-Status" "Yes",
+    header :regex "X-Spam-Score" "^([5-9]|[1-9][0-9]+)(\\.[0-9]+)?",  # Catches scores ≥5.0
+    header :regex "X-Spam-Level" "\\*\\*\\*\\*\\*"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Legacy spam detection
+if anyof (address :contains "to" "info@free-electrons.com") {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+if header :contains ["X-GND-Status"] ["MCE","PCE"] {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+if allof (header :contains ["X-GND-Status"] ["SPAM"], header :regex ["X-GND-Spam-Score"] ["[2-4][0-9][0-9]"]) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Common phishing and suspicious patterns
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(urgent|action.*required|verify.*account|suspended|locked|expire|confirm|update.*payment)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(winner|lottery|congratulations|inheritance|million|deposit)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(viagra|cialis|pharmacy|pills|medication|enhancement)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(earn.*money|work.*from.*home|make.*\\$|investment|profit)"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Cryptocurrency and gift card scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(bitcoin|btc|ethereum|eth|crypto|blockchain|nft|wallet)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(gift.*card|amazon.*card|itunes|google.*play|steam.*card)",
+    body :regex :comparator "i;ascii-casemap" "(send.*bitcoin|crypto.*wallet|blockchain.*investment|nft.*opportunity)"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Fake reply abuse (Re: without proper In-Reply-To or References headers)
+if allof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "^(re:|fwd?):",
+    not exists "In-Reply-To",
+    not exists "References",
+    not exists "List-Id",
+    not exists "List-Unsubscribe"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Suspicious sender patterns
+if anyof (
+    address :regex :comparator "i;ascii-casemap" "from" "no-?reply@.*(tk|ml|ga|cf)",
+    address :regex "from" "[0-9]+@",
+    header :regex :comparator "i;ascii-casemap" "From" "(noreply|no-reply)@.*(tk|ml|ga|cf|info|biz)",
+    header :contains "From" "undisclosed-recipients"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Missing or suspicious headers
+if anyof (
+    not exists "Message-ID",
+    not exists "Date",
+    header :regex "Received" "^\s*$"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Bulk/mass mailing indicators (excluding legitimate mailing lists)
+if anyof (
+    header :contains "X-Mailer" "Mass",
+    header :contains "X-Mailer" "Bulk",
+    header :contains "X-Priority" "5"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Bulk emails without proper mailing list headers
+if allof (
+    header :regex :comparator "i;ascii-casemap" "Precedence" "^(bulk|junk)$",
+    not exists "List-Id",
+    not exists "List-Unsubscribe"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Suspicious attachment patterns
+if header :regex :comparator "i;ascii-casemap" "Content-Type" "application/(exe|bat|com|scr|vbs|jar|zip)" {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# HTML-only emails with suspicious content
+if allof (
+    header :contains "Content-Type" "text/html",
+    not header :contains "Content-Type" "text/plain"
+) {
+    if body :regex :comparator "i;ascii-casemap" "<a[^>]*href[^>]*>(click|download|verify|update|confirm)" {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Charset obfuscation attempts (but exclude legitimate mailing lists and business emails)
+if allof (
+    header :regex "Content-Type" "charset=(koi8|windows-125[0-9]|iso-8859-[0-9]+)",
+    not exists "List-Id",
+    not exists "List-Unsubscribe",
+    not address :contains ["from", "to", "cc"] "bootlin.com"
+) {
+    if body :regex :comparator "i;ascii-casemap" "(urgent|winner|viagra|cialis|loan|investment)" {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Reputation-based filtering
+if anyof (
+    allof (
+        header :regex "Received" "\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\]",
+        not header :contains "Received" "kernel.org",
+        not header :contains "Received" "vger.kernel.org",
+        not header :contains "Received" "denx.de",
+        not header :contains "Received" "google.com",
+        not header :contains "Received" "galae.net",
+        not header :contains "Received" "bootlin.com",
+        not header :contains "Received" "nongnu.org",
+        not header :contains "Received" "openembedded.org",
+        not header :contains "Received" "yoctoproject.org",
+        not header :contains "Received" "infradead.org",
+        not exists "List-Id",
+        not exists "List-Unsubscribe"
+    ),
+    allof (
+        header :contains "Received" "unknown",
+        not exists "List-Id",
+        not exists "List-Unsubscribe"
+    ),
+    allof (
+        header :regex "Received" "\\.(tk|ml|ga|cf)\\s",
+        not exists "List-Id",
+        not exists "List-Unsubscribe"
+    )
+) {
+    # Only allow if it's a legitimate reply/forward with proper headers
+    if allof (
+        header :regex :comparator "i;ascii-casemap" "Subject" "(re:|fwd:)",
+        anyof (
+            exists "In-Reply-To",
+            exists "References"
+        )
+    ) {
+        # Allow legitimate replies and forwards with proper headers
+    } else {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Modern scam patterns (2024-2026) - AI/crypto tool scams with whitelisting
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(chatgpt|ai.*tool|artificial.*intelligence|gpt-[0-9])",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(midjourney|dall-e|stable.*diffusion)"
+) {
+    if not anyof (
+        address :contains "from" ["openai.com", "anthropic.com", "google.com", "microsoft.com"],
+        address :contains "from" "bootlin.com",
+        exists "List-Id",
+        exists "List-Unsubscribe"
+    ) {
+        # Only mark as spam if it contains typical scam keywords
+        if header :regex :comparator "i;ascii-casemap" "Subject" "(free|earn|investment|profit|get.*rich|limited.*time|act.*now)" {
+            fileinto "Junk";
+            addflag "Junk";
+            stop;
+        }
+    }
+}
+
+# Package delivery scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(fedex|ups|dhl|usps|delivery.*failed|parcel|package.*held|shipment)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(track.*package|delivery.*attempt|customs.*fee|redelivery)"
+) {
+    if not anyof (
+        address :contains "from" ["fedex.com", "ups.com", "dhl.com", "usps.com", "usps.gov"],
+        exists "List-Id"
+    ) {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Tech support and software scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(microsoft.*support|apple.*support|google.*support|tech.*support)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(license.*expir|software.*renew|subscription.*expir|office.*365|windows.*license)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(mcafee|norton|antivirus|security.*software)"
+) {
+    if not anyof (
+        address :contains "from" ["microsoft.com", "apple.com", "google.com"],
+        exists "List-Id"
+    ) {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Social media security alerts
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(facebook.*security|instagram.*security|linkedin.*security|twitter.*security)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(unusual.*activity|suspicious.*login|account.*compromised|security.*alert)"
+) {
+    if not anyof (
+        address :contains "from" ["facebook.com", "facebookmail.com", "instagram.com", "linkedin.com", "twitter.com"],
+        exists "List-Id"
+    ) {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Banking and financial phishing
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(paypal|venmo|zelle|cashapp|wise|revolut)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(bank.*account|credit.*card|debit.*card|unusual.*transaction)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(fraud.*alert|transaction.*declined|card.*blocked|account.*limit)"
+) {
+    if not address :contains "from" ["paypal.com", "venmo.com", "wise.com", "revolut.com"] {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# DocuSign and e-signature scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(docusign|document.*sign|e-?sign|electronic.*signature)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(sign.*document|review.*document|pending.*signature)"
+) {
+    if not anyof (
+        address :contains "from" ["docusign.com", "docusign.net"],
+        exists "List-Id"
+    ) {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Tax and government impersonation (only flag with urgency/action keywords)
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(irs|tax.*refund|tax.*return|hmrc|inland.*revenue)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(government.*grant|stimulus|social.*security|benefits.*payment)"
+) {
+    if not anyof (
+        address :contains "from" "bootlin.com",
+        exists "List-Id"
+    ) {
+        # Only flag if it has typical scam urgency/action keywords
+        if anyof (
+            header :regex :comparator "i;ascii-casemap" "Subject" "(urgent|action.*required|claim.*now|expires?|immediate|verify|confirm|suspend)",
+            header :regex :comparator "i;ascii-casemap" "Subject" "(click.*here|act.*now|limited.*time)"
+        ) {
+            fileinto "Junk";
+            addflag "Junk";
+            stop;
+        }
+    }
+}
+
+# Subscription and streaming service scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(netflix|spotify|amazon.*prime|disney.*plus|hbo)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(subscription.*cancel|membership.*expir|payment.*fail|renew.*subscription)"
+) {
+    if not anyof (
+        address :contains "from" ["netflix.com", "spotify.com", "amazon.com", "disneyplus.com", "hbo.com"],
+        exists "List-Id"
+    ) {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Invoice and payment request scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(invoice.*#|payment.*request|outstanding.*balance|overdue.*payment)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(remittance|payment.*due|final.*notice|collection.*notice)"
+) {
+    if not anyof (
+        address :contains "from" "bootlin.com",
+        exists "List-Id"
+    ) {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
+}
+
+# Remote job and work-from-home scams
+if anyof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(work.*from.*home|remote.*position|earn.*\\$[0-9]+|weekly.*paycheck)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(job.*offer|hiring.*immediately|part.*time.*income|easy.*money)",
+    header :regex :comparator "i;ascii-casemap" "Subject" "(data.*entry|online.*survey|mystery.*shopper)"
+) {
+    fileinto "Junk";
+    addflag "Junk";
+    stop;
+}
+
+# Password reset and credential phishing
+if allof (
+    header :regex :comparator "i;ascii-casemap" "Subject" "(password.*reset|password.*expir|reset.*password|change.*password)",
+    not exists "List-Id",
+    not address :contains "from" "bootlin.com"
+) {
+    if header :regex :comparator "i;ascii-casemap" "Subject" "(urgent|immediate|required|expir)" {
+        fileinto "Junk";
+        addflag "Junk";
+        stop;
+    }
 }
