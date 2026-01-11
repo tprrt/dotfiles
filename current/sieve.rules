@@ -32,6 +32,7 @@ if allof (
         header :regex "X-Spam-Level" "\\*\\*\\*\\*\\*"
     ),
     not anyof (
+        header :contains "List-Id" "kernel.org",
         header :contains "List-Id" "vger.kernel.org",
         header :contains "List-Id" "lists.yoctoproject.org",
         header :contains "List-Id" "lists.openembedded.org",
@@ -174,6 +175,10 @@ if anyof (
         not header :contains "Received" "google.com",
         not header :contains "Received" "galae.net",
         not header :contains "Received" "bootlin.com",
+        not header :contains "Received" "nongnu.org",
+        not header :contains "Received" "openembedded.org",
+        not header :contains "Received" "yoctoproject.org",
+        not header :contains "Received" "infradead.org",
         not exists "List-Id",
         not exists "List-Unsubscribe"
     ),
