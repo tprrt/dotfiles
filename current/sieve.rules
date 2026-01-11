@@ -77,7 +77,9 @@ if anyof (
 if allof (
     header :regex :comparator "i;ascii-casemap" "Subject" "^(re:|fwd?):",
     not exists "In-Reply-To",
-    not exists "References"
+    not exists "References",
+    not exists "List-Id",
+    not exists "List-Unsubscribe"
 ) {
     fileinto "Junk";
     addflag "Junk";
@@ -167,6 +169,7 @@ if anyof (
     allof (
         header :regex "Received" "\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\]",
         not header :contains "Received" "kernel.org",
+        not header :contains "Received" "vger.kernel.org",
         not header :contains "Received" "denx.de",
         not header :contains "Received" "google.com",
         not header :contains "Received" "galae.net",
@@ -174,8 +177,16 @@ if anyof (
         not exists "List-Id",
         not exists "List-Unsubscribe"
     ),
-    header :contains "Received" "unknown",
-    header :regex "Received" "\\.(tk|ml|ga|cf)\\s"
+    allof (
+        header :contains "Received" "unknown",
+        not exists "List-Id",
+        not exists "List-Unsubscribe"
+    ),
+    allof (
+        header :regex "Received" "\\.(tk|ml|ga|cf)\\s",
+        not exists "List-Id",
+        not exists "List-Unsubscribe"
+    )
 ) {
     if header :regex :comparator "i;ascii-casemap" "Subject" "(re:|fwd:)" {
         # Allow replies and forwards even from suspicious IPs - do nothing
