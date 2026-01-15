@@ -63,3 +63,8 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 export SUPPRESS_BOLTDB_WARNING=1
 
 export EDITOR="doom emacs"
+
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups
+
