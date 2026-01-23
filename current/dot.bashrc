@@ -39,6 +39,7 @@ function wttrin { curl https://wttr.in/$1; }
 
 # alias
 alias cp='cp -i'
+alias cuname='cowsay $(uname -a) | lolcat'
 alias df='df -h'
 alias diff='colordiff -Nurp'
 alias du='du -c -h'
@@ -62,9 +63,9 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 
 export SUPPRESS_BOLTDB_WARNING=1
 
-export EDITOR="doom emacs"
+export EDITOR="doom emacs -nw"
 
 export HISTSIZE=10000
 export HISTFILESIZE=20000
-export HISTCONTROL=ignoredups
-
+export HISTCONTROL=ignoredups:erasedups
+export HISTIGNORE="ls:cd:clear:exit:history:history *:pwd:bg:fg:jobs:claude:claude *:copilot:copilot *"
