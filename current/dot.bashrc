@@ -68,4 +68,4 @@ export EDITOR="doom emacs -nw"
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups:erasedups
-export HISTIGNORE="ls:cd:clear:exit:history:history *:pwd:bg:fg:jobs:claude:claude *:copilot:copilot *"
+export HISTIGNORE="bg:cd:clear:exit:fg:history:history *:jobs:ls:pwd:reset:claude:claude *:copilot:copilot *"
