@@ -24,8 +24,11 @@ export PATH="$HOME/dev/bin:$PATH"
 # tokens
 # export CIRLECI_TOKEN="FOOBAR"
 # export GH_TOKEN="FOOBAR"
+# export GITHUB_TOKEN="FOOBAR"
 # export DOCKERHUB_TOKEN="FOOBAR"
 # export MISTRAL_API_KEY="FOOBAR"
+# export ANTHROPIC_API_KEY="FOOBAR"
+# export TAVILY_API_KEY="FOOBAR"
 
 # bootlin
 export FEINTRAGIT="$HOME/dev/bootlin/intragit"
@@ -68,4 +71,7 @@ export EDITOR="doom emacs -nw"
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups:erasedups
-export HISTIGNORE="bg:cd:clear:exit:fg:history:history *:jobs:ls:pwd:reset:claude:claude *:copilot:copilot *"
+export HISTIGNORE="bg:cd:clear:exit:fg:history:history *:jobs:ls:pwd:reset:claude:claude *:copilot:copilot *:opencode:opencode *"
+
+# opencode
+export PATH=/home/tperrot/.opencode/bin:$PATH
