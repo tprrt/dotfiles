@@ -234,6 +234,11 @@ if allof (address :contains ["to", "cc"] "technicalstaff@bootlin.com") {
     stop;
 }
 
+if allof (address :contains ["to", "cc"] "busybox@busybox.net") {
+    fileinto "INBOX/Misc/busybox";
+    stop;
+}
+
 if allof (address :contains ["to", "cc"] "libmbim-devel@lists.freedesktop.org") {
     fileinto "INBOX/Misc/libmbim-devel";
     stop;
