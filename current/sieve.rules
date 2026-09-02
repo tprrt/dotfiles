@@ -9,7 +9,7 @@ if address :contains "from" "thomas.perrot@bootlin.com" {
     addflag "$label1";
 }
 
-if allof (address :contains ["to", "cc"] ["buildroot@buildroot.org", "buildroot@busybox.net"]) {
+if allof (address :contains ["to", "cc"] ["buildroot@buildroot.org", "buildroot@busybox.net", "buildroot@uclibc.org"]) {
     fileinto "INBOX/Buildroot";
     stop;
 }
@@ -104,7 +104,7 @@ if allof (address :contains ["to", "cc"] "yocto-status@lists.yoctoproject.org") 
     stop;
 }
 
-if allof (address :contains ["to", "cc"] "u-boot@lists.denx.de") {
+if allof (address :contains ["to", "cc"] ["u-boot@lists.denx.de", "u-boot@lists.u-boot-project.org"]) {
     fileinto "INBOX/U-Boot";
     stop;
 }
@@ -234,7 +234,7 @@ if allof (address :contains ["to", "cc"] "technicalstaff@bootlin.com") {
     stop;
 }
 
-if allof (address :contains ["to", "cc"] "busybox@busybox.net") {
+if allof (address :contains ["to", "cc"] ["busybox@busybox.net", "busybox@googlegroups.com"]) {
     fileinto "INBOX/Misc/busybox";
     stop;
 }
@@ -391,7 +391,7 @@ if anyof (
 if anyof (
     not exists "Message-ID",
     not exists "Date",
-    header :regex "Received" "^\s*$"
+    header :regex "Received" "^[[:space:]]*$"
 ) {
     fileinto "Junk";
     addflag "Junk";
@@ -421,7 +421,7 @@ if allof (
 }
 
 # Suspicious attachment patterns
-if header :regex :comparator "i;ascii-casemap" "Content-Type" "application/(exe|bat|com|scr|vbs|jar|zip)" {
+if header :regex :comparator "i;ascii-casemap" "Content-Type" "application/(exe|bat|com|scr|vbs|jar)" {
     fileinto "Junk";
     addflag "Junk";
     stop;
@@ -439,7 +439,7 @@ if allof (
     }
 }
 
-# Charset obfuscation attempts (but exclude legitimate mailing lists and business emails)
+# Charset obfuscation attempts
 if allof (
     header :regex "Content-Type" "charset=(koi8|windows-125[0-9]|iso-8859-[0-9]+)",
     not exists "List-Id",
@@ -467,6 +467,10 @@ if anyof (
         not header :contains "Received" "openembedded.org",
         not header :contains "Received" "yoctoproject.org",
         not header :contains "Received" "infradead.org",
+        not header :contains "Received" "trustedfirmware.org",
+        not header :contains "Received" "zephyrproject.org",
+        not header :contains "Received" "freedesktop.org",
+        not header :contains "Received" "googlegroups.com",
         not exists "List-Id",
         not exists "List-Unsubscribe"
     ),
@@ -476,7 +480,7 @@ if anyof (
         not exists "List-Unsubscribe"
     ),
     allof (
-        header :regex "Received" "\\.(tk|ml|ga|cf)\\s",
+        header :regex "Received" "\\.(tk|ml|ga|cf)[[:space:]]",
         not exists "List-Id",
         not exists "List-Unsubscribe"
     )
