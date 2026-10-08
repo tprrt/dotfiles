@@ -1,0 +1,6 @@
+version = 1
+
+[[annotations]]
+path = ["*", ".*", "current/**"]
+SPDX-FileCopyrightText = "2014-2026 Thomas Perrot <thomas.perrot@tupi.fr>"
+SPDX-License-Identifier = "MIT"
