@@ -39,6 +39,9 @@ function logless { ccze -A < $1 | less -R; }
 function logtail { tail -f $1 | ccze -A; }
 function epass { openssl passwd -1 $1; }
 function kclip { xclip -sel clip < $HOME/.ssh/id_rsa.pub; }
+function picotty {
+    picocom --escape x -b 115200 --quiet "$1" | tee >(tr -d '\r\000' > "$2")
+}
 function wttrin { curl https://wttr.in/$1; }
 
 # alias
@@ -58,7 +61,7 @@ alias picocom="picocom --escape x -b 115200 --quiet"
 alias ping='ping -c 5'
 alias psc="ps xawf -eo pid,user,cgroup,args"
 alias pyhttp="python -m http.server"
-alias rm='rm -i'
+alias rm='trash-put -i'
 alias tb="nc termbin.com 9999"
 alias tree="tree -C"
 
